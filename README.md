@@ -100,12 +100,6 @@ Here are the general steps to create an AMI from an Amazon EC2 instance:
 5. In the 'Create Image' dialog box, type a unique name and description, and choose 'Create Image'.
 6. After the process completes, the AMI is available for use.
 
-For more detailed instructions, refer to the [Amazon EC2 documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami-ebs.html).
-
-## Conclusion
-
-AMIs are a powerful tool in AWS, allowing you to quickly launch and manage instances with your custom software and configurations. By understanding how to create and use AMIs, you can greatly improve your efficiency and productivity in AWS.
-
 # Setting Up a Dashboard and CPU Usage Alarm in AWS
 
 ## Introduction
@@ -121,7 +115,8 @@ This document provides a step-by-step guide on how to set up a dashboard and cre
 5. Enter a name for the dashboard and click on 'Create'.
 6. On the new dashboard screen, click on 'Add widget'.
 7. Select the type of widget you want to add (e.g., line, stacked area, number, text, etc.).
-8. Configure the widget as per your requirements and click on 'Create widget'.
+8. Configure the widget as per your requirements and click on 'Create widget'. At the end it should look like this image.
+   ![alt text](./images/Dashboard.PNG)
 
 ## Creating a CPU Usage Alarm
 
@@ -150,9 +145,3 @@ When the CPU usage alarm is triggered, a notification will be sent to the email 
 ## Testing the Alarm
 
 You can test the alarm by SSHing into your EC2 instance and running commands like `apt update/upgrade` to increase CPU usage.
-
-## Conclusion
-
-Setting up a dashboard and CPU usage alarm in AWS allows you to monitor your EC2 instances effectively and receive notifications when specified conditions are met. This can help you manage your resources efficiently and respond quickly to any issues.
-
-For more detailed instructions, refer to the [Amazon CloudWatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/US_AlarmAtThresholdEC2.html).
