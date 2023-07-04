@@ -12,6 +12,10 @@
 key - Pair. aws creates one for you, keeps pub key and makes you download the private key
 ![alt text](./images/making-a-key-pair.jpg)
 
+# what is dev ops
+
+DevOps is a set of practices that combines software development and operations to improve collaboration, efficiency, and quality in the software development lifecycle. It emphasizes automation, continuous integration and delivery, infrastructure as code, automated testing, and monitoring.
+
 # Create a VM
 
 ## Choose region
