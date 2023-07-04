@@ -14,7 +14,9 @@ key - Pair. aws creates one for you, keeps pub key and makes you download the pr
 
 # what is dev ops
 
-DevOps is a set of practices that combines software development and operations to improve collaboration, efficiency, and quality in the software development lifecycle. It emphasizes automation, continuous integration and delivery, infrastructure as code, automated testing, and monitoring.
+- DevOps is a set of practices that combines software development and operations to improve collaboration, efficiency, and quality in the software development lifecycle. It emphasizes automation, continuous integration and delivery, infrastructure as code, automated testing, and monitoring.
+
+- Dev Ops role is to ensure code is released ASAP so the end users can have a working piece of software.
 
 # Create a VM
 
@@ -30,7 +32,7 @@ DevOps is a set of practices that combines software development and operations t
 ## Choose key & SG
 
 - Next you choose your key pair to SSH into your VM. Use the global tech241 pub key and private one is in local .ssh folder.
-- **SG: ** Allows SSH, Port 27017 as inbound rules
+- **SG:** Allows SSH, Port 27017 as inbound rules
 - ![alt text](./images/select-key-pair-and-network-sg.jpg)
 
 ## Finalise
