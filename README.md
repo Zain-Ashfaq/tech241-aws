@@ -20,6 +20,35 @@ key - Pair. aws creates one for you, keeps pub key and makes you download the pr
 
 - devs were developing on their own machines but the enviroments didnt match e.g different version of OS, different dependencies. Now dev ops can set up a dev enviroment, you can automate the deployment of code since with the same enviroment you can reduce bugs.
 
+# Public IP vs Private IP in AWS
+
+## Pros and Cons
+
+### Public IP
+
+- **Pros:**
+
+  - Directly accessible over the internet, which can be beneficial for services that need to be publicly available.
+  - No need for VPN or AWS Direct Connect to access the resources.
+
+- **Cons:**
+  - Being accessible over the internet means it's exposed to potential threats.
+  - May incur additional costs as data transfer rates apply.
+
+### Private IP
+
+- **Pros:**
+
+  - Not directly accessible over the internet, providing an additional layer of security.
+  - Ideal for internal services that don't need to be exposed to the public internet.
+
+- **Cons:**
+  - Requires VPN or AWS Direct Connect for access from outside the network, which can add complexity and cost.
+
+## Diagram Illustrating Public and Private IP for VMs in VNet
+
+![alt text](./images/public-vs-private-IP.jpg)
+
 # Create a VM
 
 ## Choose region
