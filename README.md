@@ -1,24 +1,28 @@
-# Differences between AWS + Azure
+# Comparing AWS and Azure
 
-- **Resource groups**
-  - In `Azure`, everything goes in a resource group
-  - in `AWS`, resource group not necessary to use
-- **IP public address**
-  - In `Azure`, by default, uses `static`
-  - In `AWS`, by default, uses `dynamic` (changes everytime you restart VM)
-- **Terminology**
-  - Launch instance = Create VM
+## Resource Groups
 
-key - Pair. aws creates one for you, keeps pub key and makes you download the private key
-![alt text](./images/making-a-key-pair.jpg)
+- In `Azure`, all resources are grouped into resource groups.
+- In `AWS`, the use of resource groups is optional.
 
-# what is dev ops
+## Public IP Address
 
-- DevOps is a set of practices that combines software development and operations to improve collaboration, efficiency, and quality in the software development lifecycle. It emphasizes automation, continuous integration and delivery, infrastructure as code, automated testing, and monitoring.
+- In `Azure`, the default setting is `static`.
+- In `AWS`, the default setting is `dynamic` (changes every time you restart VM).
 
-- Dev Ops role is to ensure code is released ASAP so the end users can have a working piece of software.
+## Terminology
 
-- devs were developing on their own machines but the enviroments didnt match e.g different version of OS, different dependencies. Now dev ops can set up a dev enviroment, you can automate the deployment of code since with the same enviroment you can reduce bugs.
+- Launch instance = Create VM
+
+## Key Pair
+
+AWS creates a key pair for you, keeps the public key, and makes you download the private key.
+
+![Key Pair](./images/making-a-key-pair.jpg)
+
+# What is DevOps?
+
+DevOps is a set of practices that combines software development and IT operations. It aims to shorten the system development life cycle and provide continuous delivery with high software quality. DevOps is complementary with Agile software development; several DevOps aspects came from Agile methodology.
 
 # Public IP vs Private IP in AWS
 
@@ -47,61 +51,67 @@ key - Pair. aws creates one for you, keeps pub key and makes you download the pr
 
 ## Diagram Illustrating Public and Private IP for VMs in VNet
 
-![alt text](./images/public-vs-private-IP.jpg)
+![Public and Private IP for VMs in VNet](./images/public-vs-private-IP.jpg)
 
-# Create a VM
+When interacting with a VM from an external source, the public IP address is typically utilized. However, when connecting two VMs, the public database IP address has been the default method. This approach has a significant drawback: the public IP address changes frequently, which hinders automation. Using a public IP address is akin to exiting and re-entering a building, which means you lose your 'trusted' status and must comply with Network Security Group (NSG) rules.
 
-## Choose region
+To address this issue, the private IP address can be used. This allows the Network Interface Cards (NICs) in the two VMs to communicate directly. As a result, the machines can trust each other, bypassing the need for NSG rules. Consequently, there's no longer a need for the 27017 port rule. The private IP address should be used in the environment variable. It's important to note that this method is only effective if both VMs are located within the same virtual network.
+
+# Creating a VM
+
+## Choose Region
 
 - Has to be set to Ireland for Sparta training
 
-## Choose image
+## Choose Image
 
-- AMI = amazon machine image - used to make identical copy of VM - ami-0a7493ba2bc35c1e9 (the one we use (18.04 lts 1e9))
-  ![alt text](./images/choosing-image.jpg)
+- AMI = Amazon Machine Image - used to make an identical copy of VM - ami-0a7493ba2bc35c1e9 (the one we use (18.04 lts 1e9))
 
-## Choose key & SG
+![Choosing Image](./images/choosing-image.jpg)
 
-- Next you choose your key pair to SSH into your VM. Use the global tech241 pub key and private one is in local .ssh folder.
-- **SG:** Allows SSH, Port 27017 as inbound rules
-- ![alt text](./images/select-key-pair-and-network-sg.jpg)
+## Choose Key & Security Group
 
-## Finalise
+- Next, you choose your key pair to SSH into your VM. Use the global tech241 public key and the private one is in the local .ssh folder.
+- **Security Group:** Allows SSH, Port 27017 as inbound rules
 
-- Once you have completed the set up, you can search for your VM's using the search bar.
-- You can also delete you instance (known as VM) on this menu aswell as seen in this image.
-- ![alt text](./images//search-for-and-terminate-VM.jpg)
+![Select Key Pair and Network Security Group](./images/select-key-pair-and-network-sg.jpg)
+
+## Finalize
+
+- Once you have completed the setup, you can search for your VMs using thesearch bar.
+- You can also delete your instance (known as VM) on this menu as well as seen in this image.
+- ![Search for and Terminate VM](./images/search-for-and-terminate-VM.jpg)
 
 ## SSH into VM
 
 - SSH commands are shown in this image. Here is an example of a command to log in ssh -i `"~/.ssh/tech241.pem" ubuntu@ec2-54-246-226-45.eu-west-1.compute.amazonaws.com`
-- ![alt text](./images/SSH-into-VM.jpg)
+- ![SSH into VM](./images/SSH-into-VM.jpg)
 
 # MongoDB Script
 
 - After you create a DB VM, run the DB script.
 - Check the DB is running by using `sudo systemctl status mongod`. You should get a output like this image.
-  ![alt text](./images/mongodb-check-status.PNG)
+  ![MongoDB Check Status](./images/mongodb-check-status.PNG)
 - Next run `sudo cat /etc/mongod.conf` and make sure the BindIP has changed to resemble this image.
-  ![alt text](./images/mongodb-check-bindIP-change.PNG)
+  ![MongoDB Check BindIP Change](./images/mongodb-check-bindIP-change.PNG)
 
 # App Script
 
-- After you create a App VM, change this IP address to match your own DB IP in the app script `
+- After you create an App VM, change this IP address to match your own DB IP in the app script `
 
 # Define the DB_HOST variable
 
 - export DB_HOST=52.214.194.115:27017/posts`
 - If the script ran correctly it should look like this image at the end of your command line.
-  ![alt text](./images/App-Script-Check-NodeJs.PNG)
+  ![App Script Check NodeJs](./images/App-Script-Check-NodeJs.PNG)
 - Run the Script
 - Run this command and check if the proxy has been changed correctly `sudo nano /etc/nginx/sites-available/default`
 - It should look like this image
-  ![alt text](./images/App-check-proxy.PNG)
+  ![App Check Proxy](./images/App-check-proxy.PNG)
 
-User data: auto runs the script for only one time when the VM instance gets started and running. Root user so no need for sudo comands. Under advanced details section ![alt text](./images/user-data.jpg)
+User data: auto runs the script for only one time when the VM instance gets started and running. Root user so no need for sudo commands. Under advanced details section ![User Data](./images/user-data.jpg)
 
-Create an image: This is how you create an image ![alt text](./images/making-a-image.PNG)
+Create an image: This is how you create an image ![Creating an Image](./images/making-a-image.PNG)
 
 # Amazon Machine Images (AMIs)
 
@@ -129,7 +139,7 @@ Here are the general steps to create an AMI from an Amazon EC2 instance:
 5. In the 'Create Image' dialog box, type a unique name and description, and choose 'Create Image'.
 6. After the process completes, the AMI is available for use.
 
-# Setting Up a Dashboard and CPU Usage Alarm in AWS
+# Setting Up a Dashboard and CPUUsage Alarm in AWS
 
 ## Introduction
 
@@ -145,7 +155,7 @@ This document provides a step-by-step guide on how to set up a dashboard and cre
 6. On the new dashboard screen, click on 'Add widget'.
 7. Select the type of widget you want to add (e.g., line, stacked area, number, text, etc.).
 8. Configure the widget as per your requirements and click on 'Create widget'. At the end it should look like this image.
-   ![alt text](./images/Dashboard.PNG)
+   ![Dashboard](./images/Dashboard.PNG)
 
 ## Creating a CPU Usage Alarm
 
@@ -156,20 +166,20 @@ This document provides a step-by-step guide on how to set up a dashboard and cre
 5. Find the instance you want to monitor and select the checkbox next to the 'CPUUtilization' metric.
 6. Click on 'Select metric'.
 7. Under 'Conditions', configure the alarm to trigger when the average CPU utilization is greater than a specified threshold (e.g., 7%) for a specified number of periods (e.g., 1 minute). Should look like this image.
-   ![alt text](./images/Alarm/Specify%20metric%20and%20conditions.jpg)
+   ![Specify Metric and Conditions](./images/Alarm/Specify%20metric%20and%20conditions.jpg)
 
 8. Click on 'Next'.
 9. Under 'Notification', select 'In alarm' and choose an SNS topic to notify when the alarm is in the 'ALARM' state.
    Should look like this image.
-   ![alt text](./images/Alarm/2-Configure%20actions.jpg)
+   ![Configure Actions](./images/Alarm/2-Configure%20actions.jpg)
 10. Click on 'Next', enter a name and description for the alarm, and click on 'Create alarm'.
     Should look like this image.
-    ![alt text](./images/Alarm/3-Add%20name%20and%20description%20.jpg)
+    ![Add Name and Description](./images/Alarm/3-Add%20name%20and%20description%20.jpg)
 
 ## Receiving a Notification
 
 When the CPU usage alarm is triggered, a notification will be sent to the email address associated with the SNS topic you selected. The email will contain details about the alarm and the current state of your EC2 instance. The email should look like this
-![alt text](./images/Alarm/Alarm-email.PNG)
+![Alarm Email](./images/Alarm/Alarm-email.PNG)
 
 ## Testing the Alarm
 
