@@ -18,7 +18,7 @@
 
 AWS creates a key pair for you, keeps the public key, and makes you download the private key.
 
-![Key Pair](./images/making-a-key-pair.jpg)
+![Key Pair](./images/VM/making-a-key-pair.jpg)
 
 # What is DevOps?
 
@@ -67,33 +67,33 @@ To address this issue, the private IP address can be used. This allows the Netwo
 
 - AMI = Amazon Machine Image - used to make an identical copy of VM - ami-0a7493ba2bc35c1e9 (the one we use (18.04 lts 1e9))
 
-![Choosing Image](./images/choosing-image.jpg)
+![Choosing Image](./images/VM/choosing-image.jpg)
 
 ## Choose Key & Security Group
 
 - Next, you choose your key pair to SSH into your VM. Use the global tech241 public key and the private one is in the local .ssh folder.
 - **Security Group:** Allows SSH, Port 27017 as inbound rules
 
-![Select Key Pair and Network Security Group](./images/select-key-pair-and-network-sg.jpg)
+![Select Key Pair and Network Security Group](./images/VM/select-key-pair-and-network-sg.jpg)
 
 ## Finalize
 
 - Once you have completed the setup, you can search for your VMs using thesearch bar.
 - You can also delete your instance (known as VM) on this menu as well as seen in this image.
-- ![Search for and Terminate VM](./images/search-for-and-terminate-VM.jpg)
+- ![Search for and Terminate VM](./images/VM/search-for-and-terminate-VM.jpg)
 
 ## SSH into VM
 
 - SSH commands are shown in this image. Here is an example of a command to log in ssh -i `"~/.ssh/tech241.pem" ubuntu@ec2-54-246-226-45.eu-west-1.compute.amazonaws.com`
-- ![SSH into VM](./images/SSH-into-VM.jpg)
+- ![SSH into VM](./images/VM/SSH-into-VM.jpg)
 
 # MongoDB Script
 
 - After you create a DB VM, run the DB script.
 - Check the DB is running by using `sudo systemctl status mongod`. You should get a output like this image.
-  ![MongoDB Check Status](./images/mongodb-check-status.PNG)
+  ![MongoDB Check Status](./images/Check-script/mongodb-check-status.PNG)
 - Next run `sudo cat /etc/mongod.conf` and make sure the BindIP has changed to resemble this image.
-  ![MongoDB Check BindIP Change](./images/mongodb-check-bindIP-change.PNG)
+  ![MongoDB Check BindIP Change](./images/Check-script/mongodb-check-bindIP-change.PNG)
 
 # App Script
 
@@ -103,13 +103,13 @@ To address this issue, the private IP address can be used. This allows the Netwo
 
 - export DB_HOST=52.214.194.115:27017/posts`
 - If the script ran correctly it should look like this image at the end of your command line.
-  ![App Script Check NodeJs](./images/App-Script-Check-NodeJs.PNG)
+  ![App Script Check NodeJs](./images/Check-script/App-Script-Check-NodeJs.PNG)
 - Run the Script
 - Run this command and check if the proxy has been changed correctly `sudo nano /etc/nginx/sites-available/default`
 - It should look like this image
-  ![App Check Proxy](./images/App-check-proxy.PNG)
+  ![App Check Proxy](./images/Check-script/App-check-proxy.PNG)
 
-User data: auto runs the script for only one time when the VM instance gets started and running. Root user so no need for sudo commands. Under advanced details section ![User Data](./images/user-data.jpg)
+User data: auto runs the script for only one time when the VM instance gets started and running. Root user so no need for sudo commands. Under advanced details section ![User Data](./images/VM/user-data.jpg)
 
 Create an image: This is how you create an image ![Creating an Image](./images/making-a-image.PNG)
 
@@ -155,7 +155,7 @@ This document provides a step-by-step guide on how to set up a dashboard and cre
 6. On the new dashboard screen, click on 'Add widget'.
 7. Select the type of widget you want to add (e.g., line, stacked area, number, text, etc.).
 8. Configure the widget as per your requirements and click on 'Create widget'. At the end it should look like this image.
-   ![Dashboard](./images/Dashboard.PNG)
+   ![Dashboard](./images/VM/Dashboard.PNG)
 
 ## Creating a CPU Usage Alarm
 
