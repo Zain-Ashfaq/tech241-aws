@@ -13,6 +13,7 @@
 ## Terminology
 
 - Launch instance = Create VM
+- S3 bucket = blob storage
 
 ## Key Pair
 
@@ -184,3 +185,176 @@ When the CPU usage alarm is triggered, a notification will be sent to the email 
 ## Testing the Alarm
 
 You can test the alarm by SSHing into your EC2 instance and running commands like `apt update/upgrade` to increase CPU usage.
+
+# AWS CLI Commands
+
+1. Install AWS CLI:
+
+   ```bash
+   pip install awscli
+   ```
+
+2. Configure AWS:
+
+   ```bash
+   aws configure
+   ```
+
+3. List all S3 buckets:
+
+   ```bash
+   aws s3 ls
+   ```
+
+   ![alt text](./images/aws%20cli/List-all-s3-buckets.PNG)
+
+4. Create a new S3 bucket:
+
+   ```bash
+   aws s3 mb s3://tech241-zain-bucket --region eu-west-1
+   ```
+
+5. Copy a file to the S3 bucket:
+
+   ```bash
+   aws s3 cp test-file.txt s3://tech241-zain-bucket
+   ```
+
+6. Sync local directory with S3 bucket:
+
+   ```bash
+   aws s3 sync s3://tech241-zain-bucket s3_download
+   ```
+
+7. Remove a file from the S3 bucket:
+
+   ```bash
+   aws s3 rm s3://tech241-zain-bucket/test-file.txt
+   ```
+
+8. Remove all files from the S3 bucket:
+
+   ```bash
+   aws s3 rm s3://tech241-zain-bucket --recursive
+   ```
+
+9. Remove the S3 bucket:
+   ```bash
+   aws s3 rb s3://tech241-zain-bucket
+   ```
+
+# Create s3 bucket
+
+```python
+# first thing is to import boto3 library
+
+import boto3
+
+# set up an s3 connection
+s3 = boto3.client('s3')
+
+# create a bucket, in the eu-west-1 region
+bucket_name = s3.create_bucket(Bucket="tech241-zain-python-bucket", CreateBucketConfiguration={"LocationConstraint":"eu-west-1"})
+# print bucket name to confirm working script
+print(bucket_name)
+
+
+```
+
+# Upload to bucket
+
+```python
+# Import boto3 library
+import boto3
+
+# Set up an S3 connection
+s3 = boto3.client('s3')
+
+# Specify the file name and path
+file_name = "D:/Zain Sparta Global/tech241/cloud/aws/s3_buckets/test-file.txt"
+
+# Upload the file to the bucket
+upload_bucket = s3.upload_file(file_name, 'tech241-zain-python-bucket', 'test-file-from-script5.txt')
+
+print(upload_bucket)
+```
+
+# Read all item names and contents in bucket
+
+```python
+# Import boto3 library
+import boto3
+
+# Set up an S3 connection
+s3 = boto3.client('s3')
+
+# List all objects in the bucket
+response = s3.list_objects(Bucket='tech241-zain-python-bucket')
+for file_name in response['Contents']:
+    print(file_name["Key"])
+    obj = s3.get_object(Bucket='tech241-zain-python-bucket', Key=file_name["Key"])
+
+    # Read the content of the file
+    file_content = obj['Body'].read().decode('utf-8')
+
+    # Print the content of the file
+    print(file_content)
+```
+
+# Download file
+
+```python
+# Import boto3
+import boto3
+
+# set the s3 connection
+s3 = boto3.client("s3")
+
+# download the file
+download_file = s3.download_file("tech241-zain-python-bucket", "test-file-from-script5.txt", "hasitworked.txt")
+
+print(s3.download_file)
+```
+
+# Delete file in bucket
+
+```python
+# Import boto3 library
+import boto3
+
+# Set up an S3 connection
+s3 = boto3.client('s3')
+
+# Specify the bucket name and the file name
+bucket_name = 'tech241-zain-python-bucket'
+file_name = 'test-file-from-script.txt'
+
+# Delete the file from the bucket
+s3.delete_object(Bucket=bucket_name, Key=file_name)
+
+print(f'File {file_name} deleted successfully from bucket {bucket_name}.')
+```
+
+# Delete bucket
+
+```python
+# Import boto3 library
+import boto3
+
+# Set up an S3 connection
+s3 = boto3.resource('s3')
+
+# Specify the bucket name
+bucket_name = 'tech241-zain-python-bucket'
+
+# Create a bucket resource
+bucket = s3.Bucket(bucket_name)
+
+# Delete all objects in the bucket
+bucket.objects.all().delete()
+
+# Delete the bucket
+bucket.delete()
+
+print(f'Bucket {bucket_name} has been deleted')
+```

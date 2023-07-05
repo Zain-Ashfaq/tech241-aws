@@ -6,7 +6,7 @@ s3 = boto3.client('s3')
 
 # Specify the bucket name and the file name
 bucket_name = 'tech241-zain-python-bucket'
-file_name = 'test-file-from-script.text'
+file_name = 'test-file-from-script.txt'
 
 # Delete the file from the bucket
 s3.delete_object(Bucket=bucket_name, Key=file_name)
