@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Define the DB_HOST variable
+export DB_HOST=172.31.37.152:27017/posts
+
+# get into app folder
+cd /app-github-automation/app
+
+# install node js inside folder
+npm install -y
+# Populate database
+node seeds/seed.js
+
+# start app
+pm2 start app.js --name "sparta-app"

@@ -358,3 +358,55 @@ bucket.delete()
 
 print(f'Bucket {bucket_name} has been deleted')
 ```
+
+# AWS Auto Scaling
+
+AWS Auto Scaling is a service that automatically adjusts resources to maintain performance for applications hosted in the Amazon Web Services (AWS) cloud. Auto Scaling can scale up by adding more resources (like RAM or a better CPU) or scale out by creating more instances on demand. When demand decreases, it can scale in by removing or terminating unnecessary instances.
+
+## Scaling Up vs Scaling Out
+
+- **Scale Up**: This involves adding more resources to your existing instances. For example, you might add more RAM or upgrade to a better CPU. This is like moving your workload to a bigger, more powerful machine.
+
+- **Scale Out**: This involves creating more instances on demand. When demand decreases, it scales in by removing or terminating unnecessary instances.
+
+![Auto Scaling Diagram](./images/auto-scaling/monitor-systems-methods.PNG)
+
+## Auto Scaling Group (ASG)
+
+In AWS, you have an Auto Scaling Group (ASG) which is a collection of EC2 instances that share similar characteristics and are treated as a logical grouping for the purposes of instance scaling and management.
+
+**Pros of ASG**:
+
+- **Scalability**: ASG allows your applications to handle increase in traffic by allowing the capacity to increase or decrease automatically according to conditions you define.
+- **High Availability**: ASG can ensure your application has the right amount of capacity to handle the traffic. You can also configure ASG to distribute instances across multiple Availability Zones in a region, which can improve the availability of your application.
+
+The process of setting up an ASG involves creating a launch template, which specifies the instance configuration for the instances in the group. The ASG uses this launch template to launch instances.
+
+## Launch Template
+
+A launch template is a configuration file that specifies the instance configuration for the instances in the group. This includes details such as Network Security Group (NSG) rules, user data, key pair, etc. The ASG uses this launch template to know all the details in order to create a VM.
+
+## Scaling Policy
+
+A scaling policy is a defined rule that the ASG follows to determine when to create new instances. For example, a policy might state that when the CPU load reaches 50%, a new instance should be launched. The policy also specifies the minimum number of instances that should be running, the desired number of instances, and the maximum number of instances that can be created.
+
+## Load Balancer
+
+A load balancer distributes incoming application traffic across multiple targets, such as EC2 instances, in multiple Availability Zones. This increases the availability and fault tolerance of your applications. The load balancer serves as a single point of contact for clients, which increases the availability of your application. You can add and remove instances from your load balancer as your needs change, without disrupting the overall flow of requests to your application.
+
+## High Availability with ASG
+
+To make the ASG have high availability, we can set it to make the VMs in different zones. For example, there are three availability zones inside the Ireland region on AWS. If it had to create more VMs, it would just continue to loop through the three availability zones in the region. If you delete a VM and the ASG goes below the minimum, the ASG will make another one to meet the minimum.
+
+## Monitoring with CloudWatch
+
+AWS CloudWatch can be used to monitor the performance of your instances. You can set up alarms to notify you when certain thresholds are reached, such as high CPU utilization. This can help you to respond quickly to changes in demand and ensure that your instances are performing optimally.
+
+## Cost Considerations
+
+When setting up your ASG, you should consider the cost implications. You can set the maximum number```markdown
+of instances that can be running to control your costs. The business needs to decide how much they want to be spending, and can set the max accordingly.
+
+## Traffic Management
+
+We have traffic coming in (example: from the internet), connecting to our app. This connects to the Load Balancer. The ASG creates VMs based on the minimum amount specified. The load balancer balances the load between the existing VMs. This setup ensures that your application can handle varying levels of traffic and provides high availability.
