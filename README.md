@@ -410,3 +410,124 @@ of instances that can be running to control your costs. The business needs to de
 ## Traffic Management
 
 We have traffic coming in (example: from the internet), connecting to our app. This connects to the Load Balancer. The ASG creates VMs based on the minimum amount specified. The load balancer balances the load between the existing VMs. This setup ensures that your application can handle varying levels of traffic and provides high availability.
+
+# VPC
+
+![Alt text](vpc-diagram.jpeg)
+stands for Virtual Private/Public Cloud
+
+VPC is like a house - can have own house = private
+
+Internet Gateway - door to enter house (vpc)
+
+Inside VPC, you have public and private subnet
+Public subnet - put app vm inside it
+Private subnet - put app vm inside it
+
+Router - routes traffic to certain places - Traffic comes from IG to router then router routes traffic depending on the routes we set up - Uses route table to toute to public subnet
+
+Public route table - stores the routes needed to get to App VM
+
+default route table - allows internal communcation between app and db VM
+
+SSH into DB - You SSH into App VM and then on that VM you ssh into the DB vm because DB vm is in a private subnet
+
+# AWS VPC Setup
+
+Here is a breif diagram to showcase everything that could be set up in a VPC.
+
+## Internet Gateway
+
+An Internet Gateway (IGW) is a horizontally scaleable, redundant, and highly available VPC component that allows communication between instances in your VPC and the internet.
+
+**Steps to create and attach an Internet Gateway:**
+
+1. In the VPC Dashboard, go to 'Internet Gateways', then click 'Create internet gateway'.
+2. Give it a name, then click 'Create'.
+3. Select your newly created IGW, click 'Actions', then 'Attach to VPC'.
+4. Select your VPC and confirm.
+
+## Subnets
+
+A subnet is a range of IP addresses in your VPC. You can launch AWS resources into a subnet that you select.
+
+**Steps to create a Public Subnet:**
+
+1. In the VPC Dashboard, go to 'Subnets', then click 'Create subnet'.
+2. Select your VPC, give your subnet a name, select an availability zone, and specify the IPv4 CIDR block for the subnet.
+3. After creating the subnet, select it, go to the 'Subnet Actions', and click 'Modify auto-assign IP settings'.
+4. Check the 'Auto-assign IPv4' box (this ensures that your instances in this subnet will be assigned a public IP address).![Alt text](subnet.jpeg)
+
+**Steps to create a Private Subnet:**
+
+Repeat the same steps as the public subnet, but do not enable 'Auto-assign IPv4'.
+
+## Security Groups
+
+A security group acts as a virtual firewall for your instance to control inbound and outbound traffic.
+
+**Steps to create a Security Group for your application VM:**
+
+1. In the EC2 Dashboard, go to 'Security Groups' under 'Network & Security', then click 'Create security group'.
+2. Give your security group a name, select your VPC, and add a description.
+3. In the 'Inbound rules' tab, click 'Add rule' and add the following rules:
+   - SSH: Source 'Anywhere' or your IP as needed.
+   - HTTP: Source 'Anywhere' or as needed.
+   - Custom TCP: Port 3000, Source 'Anywhere' or as needed.
+4. Leave 'Outbound rules' as default (allow all), then create the security group.
+
+**Steps to create a Security Group for your DB VM:**
+
+Repeat the same steps as the application VM security group, but for the 'Inbound rules', add a Custom TCP rule for port 27017 (MongoDB).
+
+## Route Tables
+
+A route table contains a set of rules, called routes, that are used to determine where network traffic is directed.
+
+**Steps to create a Public Route Table:**
+
+1. In the VPC Dashboard, go to 'Route Tables', then click 'Create route table'.
+2. Give it a name, select your VPC, then create.
+3. Select your newly created route table, go to the 'Routes' tab, then click 'Edit routes'.
+4. Add a new route, with Destination as '0.0.0.0/0' and Target as your previously created IGW.
+5. Go to the 'Subnet Associations' tab, click 'Edit subnet associations', and associate your public subnet.Should look similiar to this image![Alt text](routes.jpeg)
+
+**Steps to create a Private Route Table:**
+
+By default, a main route table is created with your VPC, which can act as your private route table. Associate this with your private subnet:
+
+1. In the VPC Dashboard, go to 'Route Tables'.
+2. Select your main route table, go to the 'Subnet Associations' tab, then click 'Edit subnet associations'.
+3. Associate your private subnet.
+
+# AWS VPC Research Task
+
+## Understanding VPCs
+
+Virtual Private Clouds (VPCs) in AWS provide a private, isolated virtual network environment where you can deploy and manage your cloud resources, such as virtual servers, databases, and storage. It's akin to having a personalized digital realm within AWS, where you can dictate network settings, security measures, and connectivity options. VPCs in AWS serve as a fundamental component for structuring and safeguarding your cloud infrastructure.
+
+## The Importance of Using a VPC
+
+- **Customization**: You can modify network settings and define resources like Route Tables (RTs), subnets, and Internet Gateways (IGWs).
+- **Security**: VPCs offer isolation and control over access, enhancing security.
+- **Connectivity**: VPCs facilitate secure connections between cloud resources and on-premises infrastructure.
+- **Compliance**: VPCs enable you to meet compliance requirements by implementing security measures, access controls, and auditing mechanisms. This is particularly crucial in regulated industries like finance.
+- **Scalability**: You can expand your VPC and modify network configurations as needed.
+
+## Business Advantages
+
+- **Cost Efficiency**: With VPCs, you only pay for what you use, reducing wasteful spending on underutilized infrastructure. This also aids in scalability.
+- **Enhanced Security**: VPCs minimize the risk of unauthorized access and potential cyberattacks.
+- **Global Reach**: Thanks to globally available data centers across various regions and zones, applications can be deployed closer to end-users, improving performance.
+
+## Benefits for DevOps
+
+- **Facilitation of Continuous Integration/Continuous Deployment (CI/CD)**: VPCs enable seamless integration and deployment of software updates. Developers can also test their code in isolation before deploying it to production.
+- **Collaboration**: A VPC serves as a shared environment or a common "workspace" for developers and operations to collaborate effectively.
+- **Scalability**: You can adjust resources within a VPC based on demand, minimizing disruptions caused by fluctuating demand.
+- **Facilitation of Infrastructure as Code (IaC)**: VPCs allow infrastructure to be defined and managed as code, automating setup, configuration, and deployment processes.
+- **Monitoring**: VPCs offer monitoring and troubleshooting tools for tracking metrics and identifying and resolving issues.
+
+## The Rationale Behind AWS's Introduction of VPCs
+
+AWS introduced VPCs to cater to the need for secure and customizable networking in the cloud. By offering isolated virtual networks, businesses could enjoy enhanced security, more control over network configurations, and improved connectivity between on-premises and cloud environments. VPCs enabled AWS to meet the evolving needs of its customers and provide a more comprehensive and flexible networking solution within their cloud infrastructure.
