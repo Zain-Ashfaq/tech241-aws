@@ -531,3 +531,114 @@ Virtual Private Clouds (VPCs) in AWS provide a private, isolated virtual network
 ## The Rationale Behind AWS's Introduction of VPCs
 
 AWS introduced VPCs to cater to the need for secure and customizable networking in the cloud. By offering isolated virtual networks, businesses could enjoy enhanced security, more control over network configurations, and improved connectivity between on-premises and cloud environments. VPCs enabled AWS to meet the evolving needs of its customers and provide a more comprehensive and flexible networking solution within their cloud infrastructure.
+
+# Install Jenkins on brand new EC2 commands
+
+1. `sudo apt update -y`
+   - Updates the local package index on the system using the Advanced Package Tool (APT).
+2. `sudo wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -`
+   - Downloads the Jenkins repository key from the specified URL and adds it to the system's list of trusted keys.
+3. `sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'`
+   - Adds the Jenkins repository URL to the APT sources list, allowing the system to fetch Jenkins packages from the repository.
+4. `sudo apt update`
+   - Updates the package index again to include the Jenkins repository after adding it in the previous step.
+5. `sudo apt install jenkins`
+   - Installs Jenkins on the system by fetching and installing the Jenkins package from the repository.
+6. `wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -`
+   - Downloads the Jenkins repository key again and adds it to the trusted keys list.
+7. `sudo apt update`
+   - Updates the package index to include the Jenkins repository after adding the key in the previous step.
+8. `sudo apt install jenkins`
+   - Installs Jenkins on the system by fetching and installing the Jenkins package from the repository.
+9. `sudo apt upgrade -y`
+   - Upgrades all installed packages on the system to their latest versions.
+10. `wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -`
+    - Downloads the Jenkins repository key for the stable version and adds it to the trusted keys list.
+11. `sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'`
+    - Adds the Jenkins stable version repository URL to the APT sources list.
+12. `java -version`
+    - Displays the version information for Java installed on the system.
+13. `sudo apt install openjdk-11-jdk -y`
+    - Installs OpenJDK 11 on the system, which is a required dependency for Jenkins.
+14. `sudo apt update`
+    - Updates the package index to include the Jenkins repository after adding it in the previous step.
+15. `sudo apt install jenkins -y`
+    - Installs Jenkins on the system by fetching and installing the Jenkins package from the repository.
+16. `sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5BA31D57EF5975CA`
+    - Retrieves the GPG key from the Ubuntu key server using the specified key ID.
+17. `sudo apt update`
+    - Updates the package index to include the Jenkins repository after adding the key in the previous step.
+18. `sudo apt install jenkins -y`
+    - Installs Jenkins on the system by fetching and installing the Jenkins package from the repository.
+19. `jenkins --version`
+    - Displays the version information for Jenkins installed on the system.
+20. `sudo systemctl enable jenkins`
+    - Enables Jenkins as a system service, allowing it to start automatically on system boot.
+21. `sudo systemctl start jenkins`
+    - Starts the Jenkins service immediately.
+22. `sudo systemctl status jenkins`
+    - Retrieves the status of the Jenkins service, providing information about its current state.
+23. `sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
+
+    - Displays the content of the initialAdminPassword file, which contains the administrator password for Jenkins.
+
+# Setting up Jenkins
+
+1. **Install Jenkins:**
+
+   This step is essential to set up the Jenkins automation server, which will be responsible for executing the CI/CD pipeline and managing the jobs.![Alt text](images/jenkins/1-jenkins-status.JPG)
+
+2. **Configure Git Host Key Verification:**
+
+   Configuring Git Host Key Verification allows Jenkins to connect to Git repositories even if the SSL certificate is not trusted. This is particularly useful when connecting to repositories for the first time.![Alt text](images/jenkins/2-allow-github.JPG)
+
+3. **Install Required Plugins:**
+
+   - The SSH Plugin is crucial for performing remote operations over SSH. It allows Jenkins to interact with remote servers, deploy code, execute commands, and manage the deployment process securely.![Alt text](images/jenkins/3-ssh-plugins.JPG)
+   - The NodeJS Plugin is necessary to integrate Node.js functionality into Jenkins jobs. It enables running JavaScript code, executing npm commands, and leveraging the Node.js ecosystem in the build process.![Alt text](images/jenkins/4-nodejs-plugins.JPG)
+   - You also need to make it available in the tools section![Alt text](images/jenkins/5-using-nodejs.JPG)
+
+-
+
+4. **Create the "Zain-CI" Job:**
+
+   The "Zain-CI" job is the first step in the CI/CD pipeline. It performs tasks such as compiling code, running tests, and generating build artifacts. It ensures that code changes are validated and meet quality standards before further processing.
+   ![Alt text](images/jenkins/Jobs/Zain-CI/1.JPG)
+   ![Alt text](images/jenkins/Jobs/Zain-CI/2.JPG)
+   ![Alt text](images/jenkins/Jobs/Zain-CI/3.JPG)
+   ![Alt text](images/jenkins/Jobs/Zain-CI/4.JPG)
+
+5. **Create the "Zain-CI-merge" Job:**
+
+   The "Zain-CI-merge" job is responsible for merging the changes from the dev branch into the main branch or any other target branch. It ensures that code changes from different developers are integrated and tested together before deployment.
+   ![Alt text](images/jenkins/Jobs/Zain-CI-merge/1.JPG)
+   ![Alt text](images/jenkins/Jobs/Zain-CI-merge/2.JPG)
+   ![Alt text](images/jenkins/Jobs/Zain-CI-merge/3.JPG)
+   ![Alt text](images/jenkins/Jobs/Zain-CI-merge/4.JPG)
+   ![Alt text](images/jenkins/Jobs/Zain-CI-merge/5.JPG)
+   ![Alt text](images/jenkins/Jobs/Zain-CI-merge/6.JPG)
+
+6. **Create the "Zain-deploy" Job:**
+
+   The "Zain-deploy" job handles the deployment process. It typically involves packaging the application, deploying it to the target environment (e.g., staging or production), and configuring any necessary settings. This job ensures that the application is deployed correctly and ready for use.
+   ![Alt text](images/jenkins/1-jenkins-status.JPG)
+   ![Alt text](images/jenkins/2-allow-github.JPG)
+   ![Alt text](images/jenkins/3-ssh-plugins.JPG)
+   ![Alt text](images/jenkins/4-nodejs-plugins.JPG)
+   ![Alt text](images/jenkins/5-using-nodejs.JPG)
+
+7. **Configure Jenkins using Pre-configured Plugin:**
+
+   Choosing the "Use pre-configured plugin" option during Jenkins setup allows for a quick and simplified initial configuration. It ensures that the necessary plugins, including the NodeJS Plugin and SSH Plugin, are installed and configured as part of the predefined plugin set.
+
+8. **Set Up Job Dependencies:**
+
+   Setting up job dependencies allows for the automatic triggering of subsequent jobs based on the completion of previous jobs. In this case, the "Zain-CI-merge" job will start only when the "Zain-CI" job completes successfully.
+
+9. **Finalize Job Dependencies:**
+
+   Similar to step 8, configuring job dependencies ensures that the "Zain-deploy" job waits for the successful completion of the "Zain-CI-merge" job before starting. This ensures that the application being deployed is based on the latest merged code.
+
+10. **Test the Job Sequence:**
+
+    Testing the job sequence ensures that the entire CI/CD pipeline works as expected. By committing and pushing changes, the "Zain-CI" job will trigger automatically, followed by the "Zain-CI-merge" job, and finally the "Zain-deploy" job. Monitoring the progress and reviewing the console output helps identify and resolve any errors or issues.
